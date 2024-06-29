@@ -9,13 +9,62 @@
 <body>
     <header>
         <h1>Decentralized Lending & Borrowing Platform</h1>
-        <!-- Navigation links if needed -->
     </header>
 
     <main>
-        <!-- Content dynamically loaded based on user actions -->
-        <div id="dashboard">
-            <!-- User dashboard content will be dynamically updated here -->
+        <div class="container">
+            <section id="dashboard" class="dashboard">
+                <!-- Dashboard content will be dynamically updated here -->
+            </section>
+
+            <section id="actions" class="actions">
+                <h2>Actions</h2>
+                <div class="action-buttons">
+                    <button onclick="showDepositForm()">Deposit</button>
+                    <button onclick="showBorrowForm()">Borrow</button>
+                </div>
+            </section>
+
+            <section id="transaction-history" class="transaction-history">
+                <h2>Transaction History</h2>
+                <ul id="transaction-list">
+                    <!-- Transaction history will be dynamically updated here -->
+                </ul>
+            </section>
+        </div>
+
+        <div id="modal-bg" class="modal-bg">
+            <div id="deposit-modal" class="modal">
+                <span class="close-btn" onclick="closeModal()">×</span>
+                <h2>Deposit Assets</h2>
+                <form id="deposit-form">
+                    <label for="asset">Asset:</label>
+                    <select id="asset" name="asset">
+                        <option value="DOT">DOT</option>
+                        <option value="KSM">KSM</option>
+                        <!-- Add more options as needed -->
+                    </select>
+                    <label for="amount">Amount:</label>
+                    <input type="number" id="amount" name="amount" required>
+                    <button type="submit">Deposit</button>
+                </form>
+            </div>
+
+            <div id="borrow-modal" class="modal">
+                <span class="close-btn" onclick="closeModal()">×</span>
+                <h2>Borrow Assets</h2>
+                <form id="borrow-form">
+                    <label for="collateral">Collateral:</label>
+                    <select id="collateral" name="collateral">
+                        <option value="DOT">DOT</option>
+                        <option value="KSM">KSM</option>
+                        <!-- Add more options as needed -->
+                    </select>
+                    <label for="amount-to-borrow">Amount to Borrow:</label>
+                    <input type="number" id="amount-to-borrow" name="amount-to-borrow" required>
+                    <button type="submit">Borrow</button>
+                </form>
+            </div>
         </div>
     </main>
 
@@ -23,7 +72,6 @@
         <p>&copy; 2024 Your Company</p>
     </footer>
 
-    <!-- JavaScript files -->
     <script src="app.js"></script>
 </body>
 </html>
