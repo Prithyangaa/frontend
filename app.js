@@ -1,56 +1,100 @@
-// Example JavaScript code for interacting with smart contracts and APIs
-document.addEventListener('DOMContentLoaded', async () => {
-    const substrateEndpoint = 'ws://localhost:9944'; // Replace with your Substrate node endpoint
+// Example JavaScript code for interacting with the frontend UI
+document.addEventListener('DOMContentLoaded', () => {
+    const depositForm = document.getElementById('deposit-form');
+    const borrowForm = document.getElementById('borrow-form');
+    const modalBg = document.getElementById('modal-bg');
+    const depositModal = document.getElementById('deposit-modal');
+    const borrowModal = document.getElementById('borrow-modal');
+    const transactionList = document.getElementById('transaction-list');
 
-    // Example function to load user dashboard
-    async function loadDashboard() {
-        const dashboardElement = document.getElementById('dashboard');
+    // Show deposit form modal
+    window.showDepositForm = function() {
+        modalBg.style.display = 'block';
+        depositModal.style.display = 'block';
+    };
 
-        // Example: Fetch user's balances and display on dashboard
+    // Show borrow form modal
+    window.showBorrowForm = function() {
+        modalBg.style.display = 'block';
+        borrowModal.style.display = 'block';
+    };
+
+    // Close modal
+    window.closeModal = function() {
+        modalBg.style.display = 'none';
+        depositModal.style.display = 'none';
+        borrowModal.style.display = 'none';
+        depositForm.reset();
+        borrowForm.reset();
+    };
+
+    // Example submit event for deposit form
+    depositForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const formData = new FormData(depositForm);
+        const asset = formData.get('asset');
+        const amount = formData.get('amount');
+
         try {
-            const api = await connectToSubstrate(substrateEndpoint); // Function to connect to Substrate node
-            const { account } = await getCurrentAccount(api); // Function to get current user account
-
-            // Example: Fetch and display user's balances
-            const balances = await fetchUserBalances(api, account);
-            dashboardElement.innerHTML = `
-                <h2>Welcome, ${account}</h2>
-                <p>Your Balances:</p>
-                <ul>
-                    <li>DOT: ${balances.dot}</li>
-                    <li>KSM: ${balances.ksm}</li>
-                    <!-- Add more assets as needed -->
-                </ul>
-            `;
+            // Replace with actual API call to deposit assets
+            console.log(`Depositing ${amount} ${asset}...`);
+            closeModal();
+            // Example: Update transaction history
+            const transaction = document.createElement('li');
+            transaction.textContent = `Deposited ${amount} ${asset}`;
+            transactionList.appendChild(transaction);
         } catch (error) {
-            console.error('Error loading dashboard:', error);
-            dashboardElement.innerHTML = '<p>Failed to load dashboard.</p>';
+            console.error('Error depositing assets:', error);
+        }
+    });
+
+    // Example submit event for borrow form
+    borrowForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const formData = new FormData(borrowForm);
+        const collateral = formData.get('collateral');
+        const amountToBorrow = formData.get('amount-to-borrow');
+
+        try {
+            // Replace with actual API call to borrow assets
+            console.log(`Borrowing ${amountToBorrow} with ${collateral} collateral...`);
+            closeModal();
+            // Example: Update transaction history
+            const transaction = document.createElement('li');
+            transaction.textContent = `Borrowed ${amountToBorrow} with ${collateral} collateral`;
+            transactionList.appendChild(transaction);
+        } catch (error) {
+            console.error('Error borrowing assets:', error);
+        }
+    });
+
+    // Example: Fetch user balances and update dashboard
+    async function fetchUserBalances() {
+        try {
+            // Replace with actual API call to fetch user balances
+            const balances = { DOT: 1000, KSM: 500 }; // Example balances
+            updateDashboard(balances);
+        } catch (error) {
+            console.error('Error fetching user balances:', error);
         }
     }
 
-    // Example: Connect to Substrate node
-    async function connectToSubstrate(endpoint) {
-        const api = await ApiPromise.create({ provider: new WsProvider(endpoint) });
-        return api;
+    // Example: Update dashboard with user balances
+    function updateDashboard(balances) {
+        const dashboard = document.getElementById('dashboard');
+        dashboard.innerHTML = `
+            <h2>Dashboard</h2>
+            <div class="balances">
+                <p>Balance:</p>
+                <ul>
+                    <li>DOT: ${balances.DOT}</li>
+                    <li>KSM: ${balances.KSM}</li>
+                    <!-- Add more assets as needed -->
+                </ul>
+            </div>
+        `;
     }
 
-    // Example: Get current account
-    async function getCurrentAccount(api) {
-        const keyring = new Keyring({ type: 'sr25519' });
-        const accounts = await api.query.system.account.keys();
-        const account = accounts[0].accountId.toString();
-        return { account };
-    }
-
-    // Example: Fetch user balances
-    async function fetchUserBalances(api, account) {
-        const balances = {};
-        balances.dot = await api.query.system.account(account);
-        balances.ksm = await api.query.system.account(account);
-        // Add more assets as needed
-        return balances;
-    }
-
-    // Load dashboard on page load
-    await loadDashboard();
+    // Load initial dashboard data
+    fetchUserBalances();
 });
